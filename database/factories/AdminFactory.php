@@ -20,7 +20,7 @@ class AdminFactory extends Factory
         $email = $this->faker->unique()->email();
         return [
             "admin_email" => $email,
-            "admin_password" => Hash::make($this->faker->password()),
+            "admin_password" => $this->faker->unique()->email(),
         ];
     }
 }

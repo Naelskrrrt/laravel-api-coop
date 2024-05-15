@@ -11,7 +11,7 @@ class UpdateCustomerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,31 @@ class UpdateCustomerRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+
+        if ($method == 'PATCH') {
+            return [
+                'nomClient' => ['sometimes', 'min:3', 'max:255'],
+                'adresseClient' => ['sometimes', 'min:3'],
+                'emailClient' => ['sometimes', 'email'],
+                'phoneClient' => ['sometimes', 'min:10']
+            ];
+        } else {
+            return [
+                'nomClient' => ['required', 'min:3', 'max:255'],
+                'adresseClient' => ['required', 'min:3'],
+                'emailClient' => ['required', 'email'],
+                'phoneClient' => ['required', 'min:10']
+            ];
+        }
+    }
+    protected function prepareForValidation(){
+        $this->merge([
+            'nom_client' => $this->nomClient,
+            'adresse_client' => $this->adresseClient,
+            'email_client' => $this->emailClient,
+            'phone_client' => $this->phoneClient
+
+        ]);
     }
 }

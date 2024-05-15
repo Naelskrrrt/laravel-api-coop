@@ -9,26 +9,19 @@ use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\CustomerResource;
 use App\Http\Resources\V1\CustomerCollection;
-use App\Filters\V1\CustomerFilter;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return \Illuminate\Http\Response
+     *
      */
     public function index(Request $request)
     {
-        $filter = new CustomerFilter();
-        $queryItems = $filter -> transform($request);
-
-        if (count($queryItems) == 0) {
-            return new CustomerCollection(Customer::paginate());
-        } else {
-            return new CustomerCollection(Customer::where($queryItems) -> paginate());
-        }
-
+        // ->appends($request->query())
+        $customers = Customer::filter()->get();
+        return new CustomerCollection($customers);
     }
 
     /**
@@ -44,7 +37,9 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        //
+
+
+        return new CustomerResource(Customer::create($request->all()));
     }
 
     /**
@@ -68,7 +63,9 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        //
+        $customer->update($request->all());
+        return new CustomerResource($customer);
+
     }
 
     /**
@@ -76,6 +73,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+        return new CustomerResource($customer);
     }
 }

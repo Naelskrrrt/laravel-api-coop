@@ -19,7 +19,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return new AdminCollection(Admin::paginate());
+        return Admin::select()->filter()->get();
     }
 
     /**

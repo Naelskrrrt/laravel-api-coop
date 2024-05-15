@@ -11,10 +11,3 @@ Route::get('/', function () {
 });
 
 
-Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function(){
-    Route::apiResource('customers', CustomerController::class);
-    Route::apiResource('reservations', ReservationController::class);
-    Route::apiResource('admin', AdminController::class);
-    Route::apiResource('voiture', VoitureController::class);
-
-});
