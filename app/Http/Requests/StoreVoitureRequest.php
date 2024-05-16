@@ -22,7 +22,16 @@ class StoreVoitureRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'modelVoiture' => ['required', 'min:3', 'max:255'],
+            'nbPlace' => ['required'],
+            'statut' => ['required']
         ];
+    }
+    protected function prepareForValidation(){
+        $this->merge([
+            'model_voiture' => $this->modelVoiture,
+            'nb_place' => $this->nbPlace,
+            'statut' => $this->statut
+        ]);
     }
 }

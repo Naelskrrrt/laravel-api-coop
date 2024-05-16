@@ -35,7 +35,7 @@ class VoitureController extends Controller
      */
     public function store(StoreVoitureRequest $request)
     {
-        //
+        return new VoitureResource(Voiture::create($request->all()));
     }
 
     /**
@@ -59,7 +59,8 @@ class VoitureController extends Controller
      */
     public function update(UpdateVoitureRequest $request, Voiture $voiture)
     {
-        //
+        $voiture->update($request->all());
+        return new VoitureResource($voiture);
     }
 
     /**
@@ -67,6 +68,7 @@ class VoitureController extends Controller
      */
     public function destroy(Voiture $voiture)
     {
-        //
+        $voiture->delete();
+        return new VoitureResource($voiture);
     }
 }

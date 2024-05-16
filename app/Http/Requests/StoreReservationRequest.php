@@ -21,8 +21,26 @@ class StoreReservationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+         $method = $this->method();
+            return [
+                'idClient' => ['required', 'max:255'],
+                'idVoiture' => ['required'],
+                'idAdmin' => ['required'],
+                'villeDestination' => ['required', 'min:3', 'max:255'],
+                'dateDepart' => ['required'],
+                'dateReservation' => ['required'],
+                'nbPers' => ['required']
+            ];
+    }
+    protected function prepareForValidation(){
+        $this->merge([
+            'id_client' => $this->idClient,
+            'id_voiture' => $this->idVoiture,
+            'id_admin' => $this->idAdmin,
+            'ville_destination' => $this->villeDestination,
+            'date_depart' => $this->dateDepart,
+            'date_reservation' => $this->dateReservation,
+            'nb_pers' => $this->nbPers,
+        ]);
     }
 }

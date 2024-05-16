@@ -34,7 +34,7 @@ class ReservationController extends Controller
      */
     public function store(StoreReservationRequest $request)
     {
-        //
+        return new ReservationResource(Reservation::create($request->all()));
     }
 
     /**
@@ -58,14 +58,15 @@ class ReservationController extends Controller
      */
     public function update(UpdateReservationRequest $request, Reservation $reservation)
     {
-        //
+        $reservation->update($request->all());
+        return new ReservationResource($reservation);
     }
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Reservation $reservation)
     {
-        //
+        $reservation->delete();
+        return new ReservationResource($reservation);
     }
 }

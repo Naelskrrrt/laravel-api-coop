@@ -9,10 +9,20 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
 class Reservation extends Model
 {
     use HasFactory, FilterQueryString;
-    
+
 
     protected $filters = [
         'sort'
+    ];
+
+    public $fillable = [
+        'id_client',
+        'id_voiture',
+        'id_admin',
+        'ville_destination',
+        'date_depart',
+        'date_reservation',
+        'nb_pers'
     ];
 
     public function admin(){
