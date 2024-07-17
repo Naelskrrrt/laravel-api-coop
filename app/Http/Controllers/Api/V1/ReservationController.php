@@ -8,21 +8,24 @@ use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ReservationCollection;
 use App\Http\Resources\V1\ReservationResource;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PostMail;
+use Exception;
 
 class ReservationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Affiche la liste des ressources.
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-       return new ReservationCollection(Reservation::paginate());
+        $reservation = Reservation::filter()->get();
+        return new ReservationCollection($reservation);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche le formulaire pour créer une nouvelle ressource.
      */
     public function create()
     {
@@ -30,15 +33,28 @@ class ReservationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Stocke une nouvelle ressource dans le stockage.
      */
     public function store(StoreReservationRequest $request)
     {
-        return new ReservationResource(Reservation::create($request->all()));
+        try {
+            $reservation = Reservation::create($request->all());
+            Mail::to('admin@etravel.mg')->send(new PostMail($reservation));
+
+            return response()->json([
+                'message' => 'Réservation créée avec succès.',
+                'data' => new ReservationResource($reservation)
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Échec de la création de la réservation.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Affiche la ressource spécifiée.
      */
     public function show(Reservation $reservation)
     {
@@ -46,7 +62,7 @@ class ReservationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche le formulaire pour modifier la ressource spécifiée.
      */
     public function edit(Reservation $reservation)
     {
@@ -54,19 +70,42 @@ class ReservationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour la ressource spécifiée dans le stockage.
      */
     public function update(UpdateReservationRequest $request, Reservation $reservation)
     {
-        $reservation->update($request->all());
-        return new ReservationResource($reservation);
+        try {
+            $reservation->update($request->all());
+
+            return response()->json([
+                'message' => 'Réservation mise à jour avec succès.',
+                'data' => new ReservationResource($reservation)
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Échec de la mise à jour de la réservation.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
     /**
-     * Remove the specified resource from storage.
+     * Supprime la ressource spécifiée du stockage.
      */
     public function destroy(Reservation $reservation)
     {
-        $reservation->delete();
-        return new ReservationResource($reservation);
+        try {
+            $reservation->delete();
+
+            return response()->json([
+                'message' => 'Réservation supprimée avec succès.',
+                'data' => new ReservationResource($reservation)
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Échec de la suppression de la réservation.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -22,7 +22,11 @@ class Reservation extends Model
         'ville_destination',
         'date_depart',
         'date_reservation',
-        'nb_pers'
+        'nb_pers',
+        'nom_client',
+        'adresse_client',
+        'email_client',
+        'phone_client'
     ];
 
     public function admin(){

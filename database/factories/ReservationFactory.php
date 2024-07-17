@@ -23,11 +23,15 @@ class ReservationFactory extends Factory
             'id_client' => Customer::factory(),
             'id_voiture' => Voiture::factory(),
             'id_admin' => Admin::factory(),
+            "nom_client" => $this->faker->name(),
+            "adresse_client" => $this->faker->streetAddress(),
+            "phone_client" => $this->faker->phoneNumber(),
+            "email_client" => $this->faker->safeEmail(),
             'ville_destination' => $this->faker->city,
             'date_depart' => $this->faker->dateTimeBetween('now', '+1 year'),
             'date_reservation' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'nb_pers' => $this->faker->numberBetween(1, 10),
-            
+
         ];
     }
 }

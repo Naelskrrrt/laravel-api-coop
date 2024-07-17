@@ -16,10 +16,15 @@ return new class extends Migration
             $table->integer("id_client");
             $table->integer("id_voiture");
             $table->integer("id_admin");
+            $table->string('nom_client');
+            $table->string('adresse_client');
+            $table->string('phone_client');
+            $table->string('email_client');
             $table->string("ville_destination");
             $table->dateTime("date_depart");
             $table->dateTime("date_reservation");
             $table->integer("nb_pers");
+
             $table->timestamps();
         });
     }
